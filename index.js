@@ -86,9 +86,11 @@ eventEmitter.on('begin', function() {
         owner: "github",
         repo: "VisualStudio",
         page: 1,
-        per_page: 20
+        per_page: 1
     }, function(err, releases) {
+        console.log(JSON.stringify(JSON.parse(JSON.stringify(result)),null,'\t'));
 
+/*
         var releasesList = [];
         var total = 0;
 
@@ -151,6 +153,7 @@ eventEmitter.on('begin', function() {
             }
         }
     });
+*/
 });
 
 function processZipEntries(path, release, asset, entry)
