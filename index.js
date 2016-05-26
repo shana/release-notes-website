@@ -88,7 +88,105 @@ eventEmitter.on('begin', function() {
         page: 1,
         per_page: 1
     }, function(err, releases) {
-        console.log(JSON.stringify(JSON.parse(JSON.stringify(releases)),null,'\t'));
+        //console.log(JSON.stringify(JSON.parse(JSON.stringify(releases)),null,'\t'));
+
+        var version = releases[0].tag_name;
+        var name = releases[0].name;
+        var date = "May 26, 2016";
+
+        var header = `
+<li>
+    <div class="release-header">
+      <span class="release-version release-version-4">${version}</span>
+      <span class="release-name">${name}</span>
+      <span class="release-date">${date}</span>
+    </div>
+    <ul class="changes">
+        `;
+
+        var footer = `
+    </ul>
+</li>
+`
+
+        var output = header;
+
+        var lines = releases[0].body.split("\r\n");
+        //console.log(lines);
+        var csslabel = "";
+        var title = "";
+        for (var i = 0; i < lines.length; i++)
+        {
+            //console.log(lines[i]);
+            if (/# Fixes/.test(lines[i]))
+            {
+                csslabel = "change-fixed";
+                title = "Fixed";
+                continue;
+            }
+
+            if (/# Enhancements/.test(lines[i]))
+            {
+                csslabel = "change-improved";
+                title = "Improved";
+                continue;
+            }
+
+            if (/# Features/.test(lines[i]))
+            {
+                csslabel = "change-added";
+                title = "Added";
+                continue;
+            }
+
+            if (/#\d\d\d - .*/.test(lines[i]))
+            {
+                var id = lines[i].replace(/#(\d\d\d) - .*/, '$1');
+                var text = lines[i].replace(/#\d\d\d - (.*)/, '$1');
+                //console.log(id + " : " + text);
+                output += `
+        <li>
+            <div class="change-label-container">
+              <em class="change-label ${csslabel}">${title}</em>
+            </div>
+            <a href="https://github.com/github/VisualStudio/issues/${id}" class="issue-link" title="${text}">#${id}</a> ${text}
+        </li>
+            `;
+            }
+        }
+
+        output += footer;
+
+        console.log(output);
+
+
+        mkdirp.sync(__dirname + '/files');
+        var f = fs.createWriteStream(__dirname + '/files/releasenotes.html');
+        f.write(output)
+        f.end();
+
+//        var re = /#\d\d\d - .*/g;
+/*
+        var matches = releases[0].body.match(re);
+
+        console.log(matches.length);
+        for (var i = 0; i < matches.length; i++)
+        {
+            console.log(matches[i]);
+        }
+*/
+        /*
+                  <li>
+                    <div class="change-label-container">
+                      <em class="change-label change-fixed">Fixed</em>
+                    </div>
+                    <a href="https://github.com/github/VisualStudio/issues/254" class="issue-link" title="Disable login helper message, it's triggering at the wrong time">#254</a> Disable login helper message, it's triggering at the wrong time
+                  </li>
+
+                </ul>
+            </li>
+        */
+        //console.log(output);
 
 /*
         var releasesList = [];
