@@ -88,7 +88,7 @@ eventEmitter.on('begin', function() {
         page: 1,
         per_page: 1
     }, function(err, releases) {
-        console.log(JSON.stringify(JSON.parse(JSON.stringify(result)),null,'\t'));
+        console.log(JSON.stringify(JSON.parse(JSON.stringify(releases)),null,'\t'));
 
 /*
         var releasesList = [];
@@ -152,8 +152,8 @@ eventEmitter.on('begin', function() {
                 eventEmitter.emit('process', path, release, asset);
             }
         }
-    });
 */
+    });
 });
 
 function processZipEntries(path, release, asset, entry)
