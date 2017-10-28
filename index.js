@@ -92,21 +92,20 @@ eventEmitter.on('begin', function() {
 
         var version = releases[0].tag_name;
         var name = releases[0].name;
-        var date = "May 26, 2016";
+        var date = "August 8, 2016";
 
         var header = `
-<li>
-    <div class="release-header">
-      <span class="release-version release-version-4">${version}</span>
-      <span class="release-name">${name}</span>
-      <span class="release-date">${date}</span>
-    </div>
-    <ul class="changes">
-        `;
+              <li>
+                <div class="release-header">
+                  <span class="release-version release-version-4">${version}</span>
+                  <span class="release-name">${name}</span>
+                  <span class="release-date">${date}</span>
+                </div>
+                <ul class="changes">`;
 
         var footer = `
-    </ul>
-</li>
+                </ul>
+              </li>
 `
 
         var output = header;
@@ -139,19 +138,18 @@ eventEmitter.on('begin', function() {
                 continue;
             }
 
-            if (/#\d\d\d - .*/.test(lines[i]))
+            if (/#[\d]+ - .*/.test(lines[i]))
             {
                 var id = lines[i].replace(/#(\d\d\d) - .*/, '$1');
                 var text = lines[i].replace(/#\d\d\d - (.*)/, '$1');
                 //console.log(id + " : " + text);
                 output += `
-        <li>
-            <div class="change-label-container">
-              <em class="change-label ${csslabel}">${title}</em>
-            </div>
-            <a href="https://github.com/github/VisualStudio/issues/${id}" class="issue-link" title="${text}">#${id}</a> ${text}
-        </li>
-            `;
+                  <li>
+                    <div class="change-label-container">
+                      <em class="change-label ${csslabel}">${title}</em>
+                    </div>
+                    <a href="https://github.com/github/VisualStudio/issues/${id}" class="issue-link" title="${text}">#${id}</a> ${text}
+                  </li>`;
             }
         }
 
